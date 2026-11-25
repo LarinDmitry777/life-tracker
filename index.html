@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#140f1c">
+    <meta name="description" content="Life Tracker — личный список дел на каждый день">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" href="./assets/icon-192.png" type="image/png">
+    <link rel="apple-touch-icon" href="./assets/icon-180.png">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./app.js" type="module"></script>
+    <title>Life Tracker</title>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar" hidden>
+        <a class="brand" href="#home">
+          <span class="brand-mark" aria-hidden="true"><span class="icon moon"></span></span>
+          <span>Life <strong>Tracker</strong></span>
+        </a>
+        <time class="date" id="today" hidden></time>
+      </header>
+
+      <main>
+        <section id="home-screen" aria-labelledby="home-title">
+          <div class="hero home-hero">
+            <h1 id="home-title" tabindex="-1">Life Tracker</h1>
+          </div>
+          <nav class="module-grid" aria-label="Разделы">
+            <a class="module-tile" href="#evening">
+              <span class="brand-mark" aria-hidden="true"><span class="icon moon"></span></span>
+              Вечерняя рутина
+            </a>
+            <a class="module-tile" href="#day-review">
+              <span class="brand-mark" aria-hidden="true"><span class="icon journal"></span></span>
+              Итог дня
+            </a>
+          </nav>
+        </section>
+
+        <section id="evening-screen" aria-labelledby="evening-title" hidden>
+          <h1 class="visually-hidden" id="evening-title" tabindex="-1">Вечерняя рутина</h1>
+          <div class="hero evening-hero">
+            <a class="button button-quiet back-link" href="#home">На главную</a>
+            <div class="hero-copy">
+              <p class="hero-status" id="status" role="status"></p>
+            </div>
+            <div class="ring" id="progress" role="progressbar" aria-label="Прогресс вечерней рутины" aria-valuenow="0">
+              <span class="ring-value" aria-hidden="true"><span id="percentage">0</span><small>%</small></span>
+              <span class="ring-label" aria-hidden="true">выполнено</span>
+            </div>
+          </div>
+
+          <section class="checklist" aria-labelledby="checklist-title">
+            <div class="section-heading">
+              <h2 id="checklist-title">Мой список</h2>
+              <button class="button button-quiet" id="edit-list" type="button">
+                <span class="icon pencil" aria-hidden="true"></span> Изменить
+              </button>
+            </div>
+            <ul class="tasks" id="tasks" role="list"></ul>
+            <div class="empty" id="empty-list" hidden>
+              <p id="empty-message"></p>
+              <button class="button button-quiet" id="start-list" type="button">Добавить дело</button>
+            </div>
+            <p class="storage-error" id="storage-error" role="status" hidden>Браузер не сохранил изменения. Проверьте доступ к локальному хранилищу.</p>
+          </section>
+        </section>
+
+        <section id="day-review-screen" aria-labelledby="day-review-title" hidden>
+          <h1 class="visually-hidden" id="day-review-title" tabindex="-1">Итог дня</h1>
+          <a class="button button-quiet" href="#home">На главную</a>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="editor" id="editor" aria-labelledby="editor-title">
+      <form id="edit-form">
+        <div class="editor-heading">
+          <h2 id="editor-title">Изменить список</h2>
+          <button class="button button-quiet icon-button" id="close-editor" type="button" aria-label="Закрыть без сохранения">
+            <span class="icon cross" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="editor-tasks" id="editor-tasks"></div>
+        <div class="editor-actions">
+          <button class="button button-quiet" id="add-task" type="button">
+            <span class="icon plus" aria-hidden="true"></span> Добавить
+          </button>
+          <button class="button button-primary" type="submit">Сохранить</button>
+        </div>
+      </form>
+    </dialog>
+
+    <template id="edit-task-template">
+      <fieldset class="edit-card">
+        <legend class="visually-hidden"></legend>
+        <div class="editor-row">
+          <input class="task-field task-title" aria-label="Название дела" placeholder="Название дела" required autocomplete="off">
+          <button class="button icon-button remove-task" type="button">
+            <span class="icon trash" aria-hidden="true"></span>
+          </button>
+        </div>
+        <label class="edit-label">
+          Расписание
+          <select class="task-field schedule-kind">
+            <option value="daily">Каждый день</option>
+            <option value="interval">Каждые N дней</option>
+            <option value="weekly">По дням недели</option>
+          </select>
+        </label>
+        <label class="edit-label interval-options" hidden>
+          Интервал в днях
+          <input class="task-field interval-days" type="number" inputmode="numeric" min="1" step="1" value="2">
+        </label>
+        <fieldset class="weekday-options" hidden>
+          <legend class="edit-label">Дни недели</legend>
+          <div class="weekdays"></div>
+        </fieldset>
+        <div class="order-buttons">
+          <button class="button button-quiet move-up" type="button">Выше</button>
+          <button class="button button-quiet move-down" type="button">Ниже</button>
+        </div>
+      </fieldset>
+    </template>
+    <noscript>Включите JavaScript, чтобы открывать разделы, отмечать дела и редактировать список.</noscript>
+  </body>
+</html>
